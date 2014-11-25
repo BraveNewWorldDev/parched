@@ -1,6 +1,6 @@
 # Parched
 
-> **NOTE:** This is hella experimental. Please give anys feedback you might have.
+> **NOTE:** This is hella experimental. Please give any feedback you might have.
 
 Parched is a tiny layer built on top of Gulp that lets people write and share
 plugins and tasks with minimal configuration from the end user.

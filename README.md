@@ -8,7 +8,7 @@ plugins and tasks with minimal configuration from the end user.
 It aims for convention over configuration.  
 It is heavily inspired by Brunch.
 
-See parched-example-app, or parched-tasks-webapp even. The following will be
+See [parched-example-app](https://github.com/raisedmedia/parched-example-app), or [parched-tasks-webapp](https://github.com/raisedmedia/parched-tasks-webapp) even. The following will be
 based on them.
 
 ## Getting Started

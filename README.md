@@ -236,10 +236,10 @@ Sort an array based on `before` and `after` properties.
 
 Property | Description
 ---------|------------
-object[] collection | The array to act on
-string[]? before | What should be first
-string[]? after | What should be last
-string? getItem(item) | Any logic to identify the item
+`object[] collection` | The array to act on
+`string[]? before` | What should be first
+`string[]? after` | What should be last
+`string? getItem(item)` | Any logic to identify the item
 
 ### Parched.gulpSort(options)
 
@@ -247,8 +247,8 @@ Sort a stream of gulp files with `sortBeforeAfter`
 
 Property | Description
 ---------|------------
-string[]? before | What should be first
-string[]? after | What should be last
+`string[]? before` | What should be first
+`string[]? after` | What should be last
 
 ### Parched.processManyFiles(src, streamContext, process(files, done))
 
@@ -263,7 +263,7 @@ only when their contents change.
 
 Property | Description
 ---------|------------
-object taskNameUnique | Something unique so the cache can keep track of things.
+`object taskNameUnique` | Something unique so the cache can keep track of things.
 
 ### Parched.vendor
 
@@ -271,14 +271,14 @@ The foundation.
 
 Exported Name | Package
 --------------|--------
-gulp | This is actually a function that returns the gulp reference defined in `appConfig`
-gulpif | gulp-if
-gutil | gulp-util
-through2 | through2
-combine | stream-combiner
-merge | merge-stream
-runSequence | run-sequence
-xtend | node.extend
-anymatch | anymatch
-lazypipe | lazypipe
-multistream | multistream
+`gulp` | This is actually a function that returns the gulp reference defined in `appConfig`
+`gulpif` | gulp-if
+`gutil` | gulp-util
+`through2` | through2
+`combine` | stream-combiner
+`merge` | merge-stream
+`runSequence` | run-sequence
+`xtend` | node.extend
+`anymatch` | anymatch
+`lazypipe` | lazypipe
+`multistream` | multistream

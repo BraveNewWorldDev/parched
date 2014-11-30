@@ -18,12 +18,12 @@ setup = (appConfig) ->
 
   appConfig.beforeLoad?()
 
-  for pluginName in parchedDependencies.plugins
-    plugin = resolveDependency pluginName
-    requirePluginWithEnv plugin
-
   for taskName in parchedDependencies.tasks
     plugin = resolveDependency taskName
+    requirePluginWithEnv plugin
+
+  for pluginName in parchedDependencies.plugins
+    plugin = resolveDependency pluginName
     requirePluginWithEnv plugin
 
   appConfig.afterLoad?()

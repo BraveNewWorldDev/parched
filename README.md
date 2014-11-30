@@ -1,6 +1,6 @@
 # Parched
 
-> **NOTE:** This is hella experimental. Please give anys feedback you might have.
+> **NOTE:** This is hella experimental. Please give any feedback you might have.
 
 Parched is a tiny layer built on top of Gulp that lets people write and share
 plugins and tasks with minimal configuration from the end user.
@@ -8,7 +8,7 @@ plugins and tasks with minimal configuration from the end user.
 It aims for convention over configuration.  
 It is heavily inspired by Brunch.
 
-See parched-example-app, or parched-tasks-webapp even. The following will be
+See [parched-example-app](https://github.com/raisedmedia/parched-example-app), or [parched-tasks-webapp](https://github.com/raisedmedia/parched-tasks-webapp) even. The following will be
 based on them.
 
 ## Getting Started
@@ -236,10 +236,10 @@ Sort an array based on `before` and `after` properties.
 
 Property | Description
 ---------|------------
-object[] collection | The array to act on
-string[]? before | What should be first
-string[]? after | What should be last
-string? getItem(item) | Any logic to identify the item
+`object[] collection` | The array to act on
+`string[]? before` | What should be first
+`string[]? after` | What should be last
+`string? getItem(item)` | Any logic to identify the item
 
 ### Parched.gulpSort(options)
 
@@ -247,8 +247,8 @@ Sort a stream of gulp files with `sortBeforeAfter`
 
 Property | Description
 ---------|------------
-string[]? before | What should be first
-string[]? after | What should be last
+`string[]? before` | What should be first
+`string[]? after` | What should be last
 
 ### Parched.processManyFiles(src, streamContext, process(files, done))
 
@@ -263,7 +263,7 @@ only when their contents change.
 
 Property | Description
 ---------|------------
-object taskNameUnique | Something unique so the cache can keep track of things.
+`object taskNameUnique` | Something unique so the cache can keep track of things.
 
 ### Parched.vendor
 
@@ -271,14 +271,14 @@ The foundation.
 
 Exported Name | Package
 --------------|--------
-gulp | This is actually a function that returns the gulp reference defined in `appConfig`
-gulpif | gulp-if
-gutil | gulp-util
-through2 | through2
-combine | stream-combiner
-merge | merge-stream
-runSequence | run-sequence
-xtend | node.extend
-anymatch | anymatch
-lazypipe | lazypipe
-multistream | multistream
+`gulp` | This is actually a function that returns the gulp reference defined in `appConfig`
+`gulpif` | gulp-if
+`gutil` | gulp-util
+`through2` | through2
+`combine` | stream-combiner
+`merge` | merge-stream
+`runSequence` | run-sequence
+`xtend` | node.extend
+`anymatch` | anymatch
+`lazypipe` | lazypipe
+`multistream` | multistream

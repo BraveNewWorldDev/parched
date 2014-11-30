@@ -14,7 +14,7 @@ setup = (appConfig) ->
   require './tasks/clean'
 
   parchedDependencies = findNamedDependencies 'parched',
-    require "#{process.cwd()}/package.json"
+    require "#{process.cwd()}/package"
 
   appConfig.beforeLoad?()
 

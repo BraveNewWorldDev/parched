@@ -65,8 +65,6 @@ resolveDependency = (packageName) ->
 
 makePluginEnv = ->
   exportsClone = xtend {}, __exports
-  delete exportsClone.setup
-  exportsClone.gulp = getGulpReference
   exportsClone
 
 
@@ -84,24 +82,11 @@ module.exports = __exports = {
   setup
   getAppConfig
 
+  gulp: getGulpReference
   Plugin: require('./plugins')
   createPlugin: require('./plugins').createPlugin
   getAllInstances: require('./plugins/store').getAllInstances
-  #lazypipeFromPluginMethod: require('./plugins/store').lazypipeFromPluginMethod
-
-  #createGulpTaskFromPluginMethod: require('./gulp-task-creator').createGulpTaskFromPluginMethod
-  #getNamespaceObject: require('./gulp-task-creator').getNamespaceObject
-  #getDependenciesFor: require('./gulp-task-creator').getDependenciesFor
-
-  #makeGulpContext: require('./gulp-task-util').makeGulpContext
-  #getSequenceFor: require('./gulp-task-util').getSequenceFor
-  #getContextObject: require('./gulp-task-util').getContextObject
-
-  #combinePluginMethodsForFile: require('./plugins/streams/combine-plugin-methods-for-file')
-  #callPluginMethod: require('./plugins/streams/call-plugin-method')
-  #filterByPluginMatcher: require('./plugins/streams/filter-by-plugin-matcher')
   handleErrors: require('./handle-errors')
-
   isProduction: require('./is-production')
 
   vendor: require('./vendor')

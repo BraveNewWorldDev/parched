@@ -2,7 +2,11 @@
   "name": "parched",
   "version": "0.0.4",
   "description": "gulp like brunch like gulp like brunch",
-  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/raisedmedia/parched.git"
+  },
+  "main": "src/index.coffee",
   "scripts": {
     "test": "./script/run-tests.sh"
   },

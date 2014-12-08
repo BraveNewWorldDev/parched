@@ -11,22 +11,22 @@ deprecatedWarning = require '../util/deprecated-warning'
 gulp().task 'parched-before', (cb) ->
   appConfig = getAppConfig()
 
-  if appConfig.__before?
+  if appConfig.__before
     deprecatedWarning '`appConfig.__before` is now `appConfig.parchedWillBuild`'
     appConfig.__before cb
-    return
-
-  appConfig.parchedWillBuild? cb
-  return
+  else if appConfig.parchedWillBuild?
+    appConfig.parchedWillBuild cb
+  else
+    cb()
 
 
 gulp().task 'parched-after', (cb) ->
   appConfig = getAppConfig()
 
-  if appConfig.__after?
+  if appConfig.__after
     deprecatedWarning '`appConfig.__after` is now `appConfig.parchedDidBuild`'
     appConfig.__after cb
-    return
-
-  appConfig.parchedDidBuild? cb
-  return
+  else if appConfig.parchedDidBuild
+    appConfig.parchedDidBuild cb
+  else
+    cb()

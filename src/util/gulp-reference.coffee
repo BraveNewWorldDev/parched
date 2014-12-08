@@ -1,4 +1,4 @@
-__gulpReference = require 'gulp'
+__gulpReference = {}
 
 getGulpReference = ->
   __gulpReference

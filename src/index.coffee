@@ -1,6 +1,7 @@
-{ getGulpReference, setGulpReference } = require './util/gulp-reference'
 resolve = require 'resolve'
 xtend = require 'node.extend'
+deprecatedWarning = require './util/deprecated-warning'
+{ getGulpReference, setGulpReference } = require './util/gulp-reference'
 { setAppConfig, getAppConfig } = require './util/app-config'
 
 
@@ -16,7 +17,11 @@ setup = (appConfig) ->
   parchedDependencies = findNamedDependencies 'parched',
     require "#{process.cwd()}/package"
 
-  appConfig.beforeLoad?()
+  if appConfig.beforeLoad?
+    deprecatedWarning '`appConfig.beforeLoad` is now appConfig.parchedWillLoad'
+    appConfig.beforeLoad()
+
+  appConfig.parchedWillLoad?()
 
   for taskName in parchedDependencies.tasks
     plugin = resolveDependency taskName
@@ -26,7 +31,11 @@ setup = (appConfig) ->
     plugin = resolveDependency pluginName
     requirePluginWithEnv plugin
 
-  appConfig.afterLoad?()
+  if appConfig.afterLoad?
+    deprecatedWarning '`appConfig.afterLoad` is now appConfig.parchedDidLoad'
+    appConfig.afterLoad()
+
+  appConfig.parchedDidLoad?()
 
   return
 

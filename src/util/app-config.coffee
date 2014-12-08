@@ -10,11 +10,11 @@ defaultConfig = {
       before: []
       after: []
 
-  __before: (done) ->
-    done()
+  #__before: (done) ->
+    #done()
 
-  __after: (done) ->
-    done()
+  #__after: (done) ->
+    #done()
 }
 
 appConfig = defaultConfig

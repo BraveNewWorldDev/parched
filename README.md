@@ -32,12 +32,12 @@ Parched.setup({
     }
   },
   
-  __before: function (done) {
+  parchedWillBuild: function (done) {
     console.log('Before');
     done();
   },
   
-  __after: function (done) {
+  parchedDidBuild: function (done) {
     console.log('After');
     done();
   }
@@ -152,8 +152,8 @@ Property | Description
 `string[]? plugins.order.before` | Specify which plugins should be run first
 `string[]? plugins.order.after` | Specify which plugins should be run last
 `object? plugins[plugin.displayName]` | Will be merged with `plugin.getDefaultOptions()` to create `plugin.options`
-`void __before(done)` | Put any logic you want to run *before* any builds here.
-`void __after(done)` | Put any logic you want to run *after* any builds here.
+`void parchedWillBuild(done)` | Put any logic you want to run *before* any builds here.
+`void parchedDidBuild(done)` | Put any logic you want to run *after* any builds here.
 
 ## Public API
 

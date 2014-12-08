@@ -11,6 +11,7 @@ createPluginMethodTask = require './create-plugin-method-task'
   addTask
 } = require './task-store'
 
+
 createTask = (taskOptions) ->
   {
     sequence
@@ -31,5 +32,6 @@ createTask = (taskOptions) ->
 
   gulp().task taskName, (done) ->
     runSequence getSequence(taskName).concat(done)...
+
 
 module.exports = createTask

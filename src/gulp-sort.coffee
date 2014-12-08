@@ -1,6 +1,7 @@
 through = require 'through'
 sortBeforeAfter = require './util/sort-before-after'
 
+
 module.exports = (options) ->
   allFiles = []
 

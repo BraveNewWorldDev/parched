@@ -1,6 +1,7 @@
 notify = require 'gulp-notify'
 isProduction = require './is-production'
 
+
 module.exports = (err) ->
   args = Array.prototype.slice.call arguments
 

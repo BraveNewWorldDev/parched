@@ -1,4 +1,5 @@
-handleErrors = require './handle-errors'
+plumberErrors = require './plumber-errors'
+
 skipLeadingUnderscore = require './skip-leading-underscore'
 {
   gulp
@@ -115,10 +116,10 @@ __createStreamForInstance = (taskOptions) ->
     stream = beforeFromConfig(stream, taskOptions)
 
   stream = stream
+    .pipe plumberErrors()
     .pipe gulpif(
       pluginInstance.src
       combine(__pipeline)
-        .on 'error', handleErrors
       through2.obj (file, enc, cb) ->
         cb()
     )

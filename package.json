@@ -24,6 +24,7 @@
     "gulp-if": "^1.2.5",
     "gulp-match": "^0.2.1",
     "gulp-notify": "^2.0.1",
+    "gulp-plumber": "^0.6.6",
     "gulp-util": "^3.0.1",
     "interpret": "^0.3.7",
     "lazypipe": "^0.2.2",

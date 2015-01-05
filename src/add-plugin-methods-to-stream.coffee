@@ -8,7 +8,7 @@
   getAllInstances
 } = require './plugins/store'
 
-handleErrors = require './handle-errors'
+plumberErrors = require './plumber-errors'
 
 
 module.exports = (taskOptions) ->
@@ -37,9 +37,9 @@ module.exports = (taskOptions) ->
         continue
 
       combined = combine(__result)
-        .on 'error', handleErrors
 
       stream
+        .pipe plumberErrors()
         .pipe gulpif(pluginInstance.src, combined)
 
   stream

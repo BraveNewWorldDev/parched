@@ -96,6 +96,7 @@ module.exports = __exports = {
   createPlugin: require('./plugins').createPlugin
   getAllInstances: require('./plugins/store').getAllInstances
   handleErrors: require('./handle-errors')
+  plumberErrors: require('./plumber-errors')
   isProduction: require('./is-production')
 
   vendor: require('./vendor')

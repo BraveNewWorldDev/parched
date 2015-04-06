@@ -1,14 +1,14 @@
-import plumberErrors from './plumberErrors'
+import plumberErrors from '../pipes/plumberErrors'
 
 import {
   combine,
   xtend,
   gulpif,
-} from './vendor'
+} from '../vendor'
 
 import {
   getAllInstances,
-} from './plugins/PluginStore'
+} from '../plugins/PluginStore'
 
 export default function (taskOptions) {
   let allPlugins = getAllInstances()

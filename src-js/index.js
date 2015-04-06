@@ -21,9 +21,14 @@ function setup (appConfig) {
   setGulpReference(appConfig.gulp)
 
   require('./tasks/before-after')
-  require('./tasks/noop')
+  //require('./tasks/noop')
   require('./tasks/watch')
   require('./tasks/clean')
+
+  //let taskListing = require('gulp-task-listing')
+  //appConfig.gulp.task('omg', taskListing)
+
+  require('gulp-task-list')(appConfig.gulp);
 
   if (appConfig.beforeLoad) {
     deprecatedWarning('`appConfig.beforeLoad` is now appConfig.parchedWillLoad')
@@ -31,7 +36,7 @@ function setup (appConfig) {
   }
   appConfig.parchedWillLoad()
 
-  parchedDependencies = findNamedDependencies('parched', require(`${process.cwd()}/package`))
+  let parchedDependencies = findNamedDependencies('parched', require(`${process.cwd()}/package`))
 
   parchedDependencies.tasks.forEach((taskName) => {
     let plugin = resolveDependency(taskName)
@@ -73,22 +78,25 @@ module.exports = {
   getAppConfig,
 
   gulp: getGulpReference,
-  Plugin: require('./plugins'),
+
+  Plugin: require('./plugins').Plugin,
   createPlugin: require('./plugins').createPlugin,
-  getAllInstances: require('./plugins/store').getAllInstances,
-  handleErrors: require('./handle-errors'),
-  plumberErrors: require('./plumber-errors'),
-  isProduction: require('./is-production'),
+  getAllInstances: require('./plugins/PluginStore').getAllInstances,
+  addPlugin: require('./plugins/PluginStore').addPlugin,
+
+  sortBeforeAfter: require('./util/sortBeforeAfter'),
+  handleErrors: require('./util/handleErrors'),
+  isProduction: require('./util/isProduction'),
+
+  addPluginMethodsToStream: require('./util/addPluginMethodToStream'),
+  createPluginMethodTask: require('./tasks/createPluginMethodTask'),
+  createTask: require('./tasks/createTask'),
+  TaskStore: require('./tasks/TaskStore'),
+  getSequence: require('./tasks/getSequence'),
+
+  processManyFiles: require('./pipes/processManyFiles'),
+  plumberErrors: require('./pipes/plumberErrors'),
+  gulpSort: require('./pipes/gulpSort'),
 
   vendor: require('./vendor'),
-
-  addPluginMethodsToStream: require('./add-plugin-methods-to-stream'),
-  createPluginMethodTask: require('./create-plugin-method-task'),
-  processManyFiles: require('./process-many-files'),
-  createTask: require('./create-task'),
-  TaskStore: require('./task-store'),
-  getSequence: require('./get-sequence'),
-
-  gulpSort: require('./gulp-sort'),
-  sortBeforeAfter: require('./util/sort-before-after'),
 }

@@ -24,4 +24,5 @@ export function getAppConfig () {
 
 export function setAppConfig (config) {
   appConfig = xtend(true, {}, defaultConfig, config)
+  return appConfig
 }

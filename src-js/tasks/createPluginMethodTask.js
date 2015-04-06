@@ -1,5 +1,5 @@
-import plumberErrors from './plumberErrors'
-import skipLeadingUnderscores from './skipLeadingUnderscore'
+import plumberErrors from '../pipes/plumberErrors'
+import skipLeadingUnderscores from '../pipes/skipLeadingUnderscore'
 
 import {
   gulp,
@@ -8,15 +8,15 @@ import {
   combine,
   merge,
   xtend,
-} from './vendor'
+} from '../vendor'
 
 import {
   getAllInstances,
-} from './PluginStore'
+} from '../plugins/PluginStore'
 
 import {
   getAppConfig,
-} from './ConfigStore'
+} from '../ConfigStore'
 
 export default function (taskOptions) {
   let {
@@ -111,6 +111,10 @@ function __createStreamForInstance (taskOptions) {
 
   let stream = gulp()
       .src(src)
+
+  if (global.isWatching) {
+    stream = stream.pipe(watch(src))
+  }
 
   if (taskOptions[beforeNameTargeted]) {
     stream = taskOptions[beforeNameTargeted](stream, taskOptions)

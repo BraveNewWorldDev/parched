@@ -1,5 +1,5 @@
 import through from 'through'
-import sortBeforeAfter from './util/sortBeforeAfter'
+import sortBeforeAfter from '../util/sortBeforeAfter'
 
 export default function (options) {
   let allFiles = []

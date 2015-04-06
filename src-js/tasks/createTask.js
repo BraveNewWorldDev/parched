@@ -5,7 +5,7 @@ import {
   xtend,
   runSequence,
   gulp,
-} from './vendor'
+} from '../vendor'
 
 import {
   addTask,

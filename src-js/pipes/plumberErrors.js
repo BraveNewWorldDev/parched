@@ -1,5 +1,5 @@
 import plumber from 'gulp-plumber'
-import handleErrors from './handleErrors'
+import handleErrors from '../util/handleErrors'
 
 export default function () {
   return plumber({

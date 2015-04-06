@@ -6,7 +6,7 @@ export default function (moduleName, packageJson) {
 
   allDependencies.forEach((packageName) => {
     // Do nothing for the main module
-    if (pluginName === moduleName) {
+    if (packageName === moduleName) {
       return
     }
 

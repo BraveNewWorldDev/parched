@@ -29,5 +29,6 @@ node_modules
 public/
 vendor/
 tmp/
-*.js
 app/
+lib/
+lib-js/

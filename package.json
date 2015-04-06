@@ -8,7 +8,10 @@
   },
   "main": "lib/index.js",
   "scripts": {
-    "test": "./script/run-tests.sh"
+    "test": "./script/run-tests.sh",
+    "watch": "babel src-js/ --out-dir lib-js --stage 1 --no-comments --watch",
+    "build": "babel src-js/ --out-dir lib-js --stage 1 --no-comments",
+    "clean": "rm -r lib-js/"
   },
   "keywords": [
     "gulp",
@@ -19,14 +22,12 @@
   "dependencies": {
     "anymatch": "^1.0.0",
     "anysort": "^1.0.0",
-    "coffee-script": "^1.8.0",
-    "deep-equal": "^0.2.1",
+    "deep-equal": "^1.0.0",
     "gulp-if": "^1.2.5",
     "gulp-match": "^0.2.1",
     "gulp-notify": "^2.0.1",
-    "gulp-plumber": "^0.6.6",
+    "gulp-plumber": "^1.0.0",
     "gulp-util": "^3.0.1",
-    "interpret": "^0.3.7",
     "lazypipe": "^0.2.2",
     "merge-stream": "^0.1.6",
     "multistream": "^1.4.2",
@@ -37,5 +38,9 @@
     "stream-combiner": "^0.2.1",
     "through": "^2.3.6",
     "through2": "^0.6.3"
+  },
+  "devDependencies": {
+    "babel": "^5.0.8",
+    "gulp": "^3.8.11"
   }
 }

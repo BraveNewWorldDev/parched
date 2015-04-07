@@ -8,7 +8,7 @@ import {
   gulp,
 } from '../vendor'
 
-gulp().task('parched-before', (done) => {
+gulp().task('parched-before', false, (done) => {
   let config = getAppConfig()
 
   if (config.__before) {
@@ -21,7 +21,7 @@ gulp().task('parched-before', (done) => {
   }
 })
 
-gulp().task('parched-after', (done) => {
+gulp().task('parched-after', false, (done) => {
   let config = getAppConfig()
   if (config.__after) {
     deprecatedWarning('`appConfig.__after` is now `appConfig.parchedDidBuild`')

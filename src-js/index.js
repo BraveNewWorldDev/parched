@@ -20,15 +20,13 @@ function setup (appConfig) {
   appConfig = setAppConfig(appConfig)
   setGulpReference(appConfig.gulp)
 
+  require('gulp-help')(getGulpReference())
+  //require('gulp-task-list')(getGulpReference());
+
   require('./tasks/before-after')
-  //require('./tasks/noop')
+  require('./tasks/build')
   require('./tasks/watch')
   require('./tasks/clean')
-
-  //let taskListing = require('gulp-task-listing')
-  //appConfig.gulp.task('omg', taskListing)
-
-  require('gulp-task-list')(appConfig.gulp);
 
   if (appConfig.beforeLoad) {
     deprecatedWarning('`appConfig.beforeLoad` is now appConfig.parchedWillLoad')
@@ -47,6 +45,9 @@ function setup (appConfig) {
     let plugin = resolveDependency(pluginName)
     requirePluginWithEnv(plugin)
   })
+
+  //let taskListing = require('gulp-task-listing')
+  //appConfig.gulp.task('omg', taskListing)
 
   if (appConfig.afterLoad) {
     deprecatedWarning('`appConfig.afterLoad` is now appConfig.parchedWillLoad')
@@ -99,4 +100,8 @@ module.exports = {
   gulpSort: require('./pipes/gulpSort'),
 
   vendor: require('./vendor'),
+
+  addDependencyToClean: require('./DependencyStore').addDependencyToClean,
+  addDependencyToBuild: require('./DependencyStore').addDependencyToBuild,
+  addDependencyToWatch: require('./DependencyStore').addDependencyToWatch,
 }

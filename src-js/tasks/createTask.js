@@ -15,6 +15,7 @@ export default function (taskOptions) {
   let {
     sequence,
     taskName,
+    helpText,
   } = taskOptions
 
   // Register the task in the store
@@ -40,7 +41,7 @@ export default function (taskOptions) {
   // Create a gulp task named after taskOptions.name
   // The gulp task is simply a proxy to a sequence of tasks returned from
   // getSequence
-  return gulp().task(taskName, (done) => {
+  return gulp().task(taskName, (helpText || false), (done) => {
     return runSequence(...getSequence(taskName).concat(done))
   })
 }

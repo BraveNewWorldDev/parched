@@ -27,7 +27,7 @@ export default function (taskOptions) {
 
   let taskNameProxy = `${taskName}--${methodName}`
 
-  gulp().task(taskNameProxy, () => {
+  gulp().task(taskNameProxy, false, () => {
     let __streams = []
 
     getAllInstances().forEach((pluginInstance) => {

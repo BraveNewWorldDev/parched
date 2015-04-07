@@ -23,6 +23,7 @@
     "anymatch": "^1.0.0",
     "anysort": "^1.0.0",
     "deep-equal": "^1.0.0",
+    "gulp-help": "^1.3.4",
     "gulp-if": "^1.2.5",
     "gulp-match": "^0.2.1",
     "gulp-notify": "^2.0.1",

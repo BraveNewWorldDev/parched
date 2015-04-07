@@ -4,7 +4,7 @@ import isProduction from './isProduction'
 export default function (err) {
   let notifyOptions = {
     title: 'Compile Error',
-    message: '<&= error.message %>',
+    message: '<%= error.message %>',
   }
 
   // Notify user with gulp-notify
@@ -20,5 +20,5 @@ export default function (err) {
   }
 
   // Keep gulp from hanging on this task
-  this.omit('end')
+  this.emit('end')
 }

@@ -8,6 +8,7 @@ import {
   combine,
   merge,
   xtend,
+  watch,
 } from '../vendor'
 
 import {
@@ -40,7 +41,7 @@ export default function (taskOptions) {
         taskNameUnique: `${taskNameProxy}--${pluginInstance.displayName}`
       })
 
-      let stream = __createStreamForInstance(callbackContext)
+      let stream = createStreamForInstance(callbackContext)
 
       if (!stream) {
         return
@@ -57,7 +58,7 @@ export default function (taskOptions) {
   })
 }
 
-function __createStreamForInstance (taskOptions) {
+function createStreamForInstance (taskOptions) {
   let {
     beforeEach,
     afterEach,
@@ -88,19 +89,19 @@ function __createStreamForInstance (taskOptions) {
   }
 
   let __pipeline = []
-      .concat(skipLeadingUnderscore())
+      .concat(skipLeadingUnderscores())
 
       // This is useful in development.
-      //.concat(through2.obj((file, enc, done) => {
-        //console.log(` \
-        //Will process \
-        //\`${file.relative}\` \
-        //with \
-        //\`${pluginInstance.displayName}#${methodName}\` \
-        //`)
-        //this.push(file)
-        //done()
-      //}))
+      .concat(through2.obj(function (file, enc, done) {
+        console.log(` \
+        Will process \
+        \`${file.relative}\` \
+        with \
+        \`${pluginInstance.displayName}#${methodName}\` \
+        `)
+        this.push(file)
+        done()
+      }))
 
       .concat(methodResult)
 
@@ -112,9 +113,9 @@ function __createStreamForInstance (taskOptions) {
   let stream = gulp()
       .src(src)
 
-  if (global.isWatching) {
-    stream = stream.pipe(watch(src))
-  }
+  //if (global.isWatching) {
+    //stream = stream.pipe(watch(src))
+  //}
 
   if (taskOptions[beforeNameTargeted]) {
     stream = taskOptions[beforeNameTargeted](stream, taskOptions)
@@ -152,3 +153,4 @@ function __createStreamForInstance (taskOptions) {
 
   return stream
 }
+

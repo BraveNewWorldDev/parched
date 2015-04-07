@@ -14,7 +14,7 @@ export default function (options) {
       before: options.before,
       after: options.after,
       //matcher: options.matcher,
-      getItem () {
+      getItem (item) {
         return item.path
       }
     })

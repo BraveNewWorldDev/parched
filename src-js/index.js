@@ -45,7 +45,7 @@ function setup (appConfig) {
 
   parchedDependencies.plugins.forEach((pluginName) => {
     let plugin = resolveDependency(pluginName)
-    requirePluginWithEnv(pluginName)
+    requirePluginWithEnv(plugin)
   })
 
   if (appConfig.afterLoad) {

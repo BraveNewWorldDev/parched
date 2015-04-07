@@ -12,7 +12,7 @@ export default function ({
 }) {
   let collectionClone = []
   let refs = collection.reduce((memo, item) => {
-    normalized = getItem(item)
+    let normalized = getItem(item)
     collectionClone.push(normalized)
 
     memo[normalized] = item

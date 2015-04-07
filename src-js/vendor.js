@@ -9,6 +9,7 @@ export default {
   combine: require('stream-combiner'),
   multistream: require('multistream'),
   merge: require('merge-stream'),
+  watch: require('gulp-watch'),
 
   xtend: require('node.extend'),
   anymatch: require('anymatch'),

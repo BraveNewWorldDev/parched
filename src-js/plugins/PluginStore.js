@@ -62,7 +62,7 @@ export function getAllInstances () {
     return allInstances
   }
 
-  config = getAppConfig()
+  let config = getAppConfig()
   registeredPlugins.forEach((plugin) => {
     let instance = new plugin()
     instance.options = xtend(

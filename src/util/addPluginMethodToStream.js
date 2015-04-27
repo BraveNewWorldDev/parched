@@ -10,6 +10,12 @@ import {
   getAllInstances,
 } from '../plugins/PluginStore'
 
+// Adds the result of each in `methodNames` for each `pluginInstance` to an
+// existing stream
+// Respects `shouldProcessAssets`
+//
+// For example, the webapp tasks use this to optionally minify when NODE_ENV
+// is production
 export default function (taskOptions) {
   let allPlugins = getAllInstances()
   let {
@@ -45,7 +51,7 @@ export default function (taskOptions) {
       combined = combine(__result)
 
       stream
-          .pipe(plumberErrors())
+          //.pipe(plumberErrors())
           .pipe(gulpif(pluginInstance.src, combined))
     })
   })

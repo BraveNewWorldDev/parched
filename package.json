@@ -6,11 +6,11 @@
     "type": "git",
     "url": "https://github.com/raisedmedia/parched.git"
   },
-  "main": "src-js/index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "./script/run-tests.sh",
-    "watch": "babel src-js/ --out-dir lib-js --stage 1 --no-comments --watch",
-    "build": "babel src-js/ --out-dir lib-js --stage 1 --no-comments",
+    "watch": "babel src/ --out-dir lib --stage 1 --no-comments --watch",
+    "build": "babel src/ --out-dir lib --stage 1 --no-comments",
     "clean": "rm -r lib-js/"
   },
   "keywords": [

@@ -19,6 +19,13 @@ import {
   getAppConfig,
 } from '../ConfigStore'
 
+// This is called with a `taskName` and `methodName`
+// and creates a gulp task that is a merged stream of all plugins
+// with `methodName` created with `createStreamForInstance`
+//
+// TODO However it might make more sense to use a combine stream,
+// like addPluginMethodToStream. There was a reason for going with
+// a merged stream ... somewhere
 export default function (taskOptions) {
   let {
     taskName,
@@ -41,6 +48,10 @@ export default function (taskOptions) {
         taskNameUnique: `${taskNameProxy}--${pluginInstance.displayName}`
       })
 
+      if (taskOptions.modifyContext) {
+        taskOptions.modifyContext(taskOptions)
+      }
+
       let stream = createStreamForInstance(callbackContext)
 
       if (!stream) {
@@ -57,6 +68,28 @@ export default function (taskOptions) {
     return merge(__streams)
   })
 }
+
+// Creates a stream to be merged into `createPluginMethodTask`
+// Respects `shouldProcessAssets`
+// Returns null if `pluginInstance[methodName]` returns null
+//
+// Also modifies the stream with a series of callbacks, that can
+// resemble something like:
+// let stream = gulp()
+//     .src(pluginInstance.src)
+//     .pipe(plumberErrors())
+//     .pipe(skipLeadingUnderscores())
+//
+// stream = taskOptions.beforeMinify(stream, taskOptions)
+// stream = taskOptions.beforeEach(stream, taskOptions)
+// stream = appConfig.beforeEach(stream, taskOptions)
+//
+// stream = stream
+//     .pipe(...pluginInstance.minify())
+//
+// stream = taskOptions.afterMinify(stream, taskOptions)
+// stream = taskOptions.afterEach(stream, taskOptions)
+// stream = appConfig.afterEach(stream, taskOptions)
 
 function createStreamForInstance (taskOptions) {
   let {
@@ -112,8 +145,10 @@ function createStreamForInstance (taskOptions) {
 
   let stream = gulp()
       .src(src)
+      .pipe(plumberErrors())
 
   //if (global.isWatching) {
+    //console.log(src)
     //stream = stream.pipe(watch(src))
   //}
 
@@ -130,27 +165,28 @@ function createStreamForInstance (taskOptions) {
   }
 
   stream = stream
-      .pipe(plumberErrors())
       .pipe(gulpif(
         pluginInstance.src,
         combine(__pipeline),
+        // TODO gutil.noop?
         through2.obj((file, enc, cb) => {
           cb()
         })
       ))
 
-  if (afterFromConfig) {
-    stream = afterFromConfig(stream, taskOptions)
+  if (taskOptions[afterNameTargeted]) {
+    stream = taskOptions[afterNameTargeted](stream, taskOptions)
   }
 
   if (afterEach) {
     stream = afterEach(stream, taskOptions)
   }
 
-  if (taskOptions[afterNameTargeted]) {
-    stream = taskOptions[afterNameTargeted](stream, taskOptions)
+  if (afterFromConfig) {
+    stream = afterFromConfig(stream, taskOptions)
   }
+
+  //console.log(taskOptions)
 
   return stream
 }
-

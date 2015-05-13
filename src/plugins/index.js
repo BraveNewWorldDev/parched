@@ -12,6 +12,9 @@ import {
 let registeredNames = []
 
 export class Plugin {
+  isProduction = isProduction
+  processManyFiles = processManyFiles
+
   noop () {
     return gutil.noop()
   }

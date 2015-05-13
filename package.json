@@ -6,12 +6,12 @@
     "type": "git",
     "url": "https://github.com/raisedmedia/parched.git"
   },
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "./script/run-tests.sh",
-    "watch": "babel src/ --out-dir lib --stage 1 --no-comments --watch",
-    "build": "babel src/ --out-dir lib --stage 1 --no-comments",
-    "clean": "rm -r lib-js/"
+    "watch": "babel src/ --out-dir lib --stage 0 --no-comments --watch",
+    "build": "babel src/ --out-dir lib --stage 0 --no-comments",
+    "clean": "rm -r lib/"
   },
   "keywords": [
     "gulp",

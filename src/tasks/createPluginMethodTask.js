@@ -125,16 +125,16 @@ function createStreamForInstance (taskOptions) {
       .concat(skipLeadingUnderscores())
 
       // This is useful in development.
-      .concat(through2.obj(function (file, enc, done) {
-        console.log(` \
-        Will process \
-        \`${file.relative}\` \
-        with \
-        \`${pluginInstance.displayName}#${methodName}\` \
-        `)
-        this.push(file)
-        done()
-      }))
+      //.concat(through2.obj(function (file, enc, done) {
+      //  console.log(` \
+      //  Will process \
+      //  \`${file.relative}\` \
+      //  with \
+      //  \`${pluginInstance.displayName}#${methodName}\` \
+      //  `)
+      //  this.push(file)
+      //  done()
+      //}))
 
       .concat(methodResult)
 

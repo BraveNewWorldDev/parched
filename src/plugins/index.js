@@ -14,10 +14,7 @@ let registeredNames = []
 export class Plugin {
   isProduction = isProduction
   processManyFiles = processManyFiles
-
-  noop () {
-    return gutil.noop()
-  }
+  noop = gutil.noop
 
   shouldProcessAssets () {
     return false

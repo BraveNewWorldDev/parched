@@ -8,8 +8,7 @@ plugins and tasks with minimal configuration from the end user.
 It aims for convention over configuration.  
 It is heavily inspired by Brunch.
 
-See [parched-example-app](https://github.com/raisedmedia/parched-example-app), or [parched-tasks-webapp](https://github.com/raisedmedia/parched-tasks-webapp) even. The following will be
-based on them.
+See [parched-example-app](https://github.com/raisedmedia/parched-example-app), or [parched-tasks-webapp](https://github.com/raisedmedia/parched-tasks-webapp) even. The following will be based on them.
 
 ## Getting Started
 
@@ -93,7 +92,8 @@ module.exports = function (Parched) {
 };
 ```
 
-Okay, sure, but how do you call these methods?
+Okay, sure, but how do you call these methods? First, let's define a
+task:
 
 ```javascript
 Parched.createTask({
@@ -103,15 +103,17 @@ Parched.createTask({
   src: 'app/scripts/**/*',
   
   // Parched makes heavy use of `run-sequence`, in this example `lint` and
-  // `compile` will be run in parallel. Drop the nested array and they will
+  // `transform` will be run in parallel. Drop the nested array and they will
   // be run in sequence.
   sequence: [
-    ['lint', 'compile']
+    ['lint', 'transform']
   ]
 });
 ```
 
-You might expect the output of `lint` to be passed to `compile`, but Parched
+Now in your terminal run `gulp build-app-scripts`. Voila!
+
+You might expect the output of `lint` to be passed to `transform`, but Parched
 opts for parallelization. To do more with the methods in the sequence, you can
 simply add `before` and `after` callbacks in `createTask`.
 
@@ -133,8 +135,8 @@ Parched.createTask({
       .pipe(remember(streamContext.taskNameUnique));
   }
   
-  // This is appended to the `compile` stream.
-  afterCompile: function (stream) {
+  // This is appended to the `transform` stream.
+  afterTransform: function (stream) {
     return stream
       .pipe(gulp.dest('public'));
   }
@@ -176,7 +178,8 @@ a gulp task that returns a `runSequence` based on `[].concat(deps).concat(sequen
 
 Property | Description
 ---------|------------
-`string taskName` (string) | The name of the task
+`string taskName` | The name of the task
+`string? helpText` | Help text to be displayed with `gulp --help`
 `string[] sequence` | The sequence of methods to be called in this task
 `string[]? deps` | Any dependencies of this task. **Note** these are passed through `run-sequence`, so nested arrays means run in parallel.
 
@@ -202,15 +205,19 @@ Property | Description
 ---------|------------
 `string taskName` (string) | The name of the task
 `string src` | Which files to act on (can also be an array)
+`void? modifyContext(taskOptions)` | Modify the taskOptions / streamContext
 `bool? shouldProcessAssets` | Are these files "assets"?
 `stream? beforeEach(stream, streamContext)` | Will be run *before* each method in the sequence
 `stream? afterEach(stream, streamContext)` | Will be run *after* each method in the sequence
 `stream? beforeMethod(stream, streamContext)` | Will be run *before* the targeted method in the sequence
 `stream? afterMethod(stream, streamContext)` | Will be run *after* the targeted method in the sequence
 
-Parched plugins have a concept of `assets`. If a task `shouldProcessAssets`, any plugins that don't will be skipped, and vice versa.
+Parched has a concept of `assets`. If a task `shouldProcessAssets`, any
+plugins that don't will be skipped, and vice versa.
 
-**A note on before/after callbacks:** The targeted callbacks are called before and after `beforeEach` / `afterEach`, ie given we are calling the `lint` method from `parched-jshint`:
+**A note on before/after callbacks:** The targeted callbacks are called
+before and after `beforeEach` / `afterEach`, ie given we are calling the
+`lint` method from `parched-jshint`:
 
 ```javascript
 var streamContext = {
@@ -221,13 +228,13 @@ var streamContext = {
   taskNameUnique: 'build-app-scripts--lint--parched-jshint'
 };
 
-beforeCompile(stream, streamContext);
+beforeLint(stream, streamContext);
 beforeEach(stream, streamContext);
 beforeEachFromConfig(stream, streamContext);
 __pluginInstance[methodName](streamContext);
 afterEachFromConfig(stream, streamContext);
 afterEach(stream, streamContext);
-afterCompile(stream, streamContext);
+afterLint(stream, streamContext);
 ```
 
 ### Parched.sortBeforeAfter(options)
@@ -264,6 +271,18 @@ only when their contents change.
 Property | Description
 ---------|------------
 `object taskNameUnique` | Something unique so the cache can keep track of things.
+
+### Parched.addDependencyToClean(taskName)
+
+Adds gulp task `taskName` to the `parched-clean` task.
+
+### Parched.addDependencyToBuild(taskName)
+
+Adds gulp task `taskName` to the `parched-build` task.
+
+### Parched.addDependencyToWatch(taskName)
+
+Adds gulp task `taskName` to the `parched-watch` task.
 
 ### Parched.vendor
 

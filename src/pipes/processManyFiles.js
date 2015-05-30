@@ -18,7 +18,7 @@ function getCacheFromContext (context) {
 
 function getFilesByMTime (cache) {
   return Object.keys(cache.files).reduce((memo, filePath) => {
-    memo[filePath] = fileObj.stat.mtime
+    memo[filePath] = cache.files[filePath].stat.mtime
     return memo
   }, {})
 }

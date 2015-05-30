@@ -48,8 +48,7 @@ export default function (taskOptions) {
         return
       }
 
-      combined = combine(__result)
-
+      let combined = combine(__result)
       stream
           //.pipe(plumberErrors())
           .pipe(gulpif(pluginInstance.src, combined))

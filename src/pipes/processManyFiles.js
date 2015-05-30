@@ -10,7 +10,7 @@ let cacheSkeleton = {
 
 function getCacheFromContext (context) {
   if (!caches[context.taskNameUnique]) {
-    caches[context.taskNameUnique] = xtend({}, cacheSkeleton)
+    caches[context.taskNameUnique] = xtend(true, {}, cacheSkeleton)
   }
 
   return caches[context.taskNameUnique]

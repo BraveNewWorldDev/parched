@@ -1,4 +1,5 @@
 import gulpmatch from 'gulp-match'
+import sortBeforeAfter from '../util/sortBeforeAfter'
 
 import {
   xtend,
@@ -72,6 +73,15 @@ export function getAllInstances () {
     )
 
     allInstances.push(instance)
+  })
+
+  allInstances = sortBeforeAfter({
+    collection: allInstances,
+    before: config.plugins.order.before,
+    after: config.plugins.order.after,
+    getItem (item) {
+      return item.displayName
+    }
   })
 
   areAllInstancesLoaded = true

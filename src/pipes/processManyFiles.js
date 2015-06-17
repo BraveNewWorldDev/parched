@@ -40,6 +40,7 @@ export default function (src, context, done) {
       addFileToCache(cache, file)
     }
 
+    this.push(file)
     doneTransform()
   }
 

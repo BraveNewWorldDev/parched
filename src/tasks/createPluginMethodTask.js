@@ -1,5 +1,6 @@
 import plumberErrors from '../pipes/plumberErrors'
 import skipLeadingUnderscores from '../pipes/skipLeadingUnderscore'
+import addPluginMethodToStream from '../util/addPluginMethodToStream'
 
 import {
   gulp,
@@ -19,6 +20,44 @@ import {
   getAppConfig,
 } from '../ConfigStore'
 
+function announceFileProcessing (pluginInstance, methodName) {
+  function transform (file, enc, done) {
+    console.log(` \
+    Will process \
+    \`${file.relative}\` \
+    with \
+    \`${pluginInstance.displayName}#${methodName}\` \
+    `)
+    this.push(file)
+    done()
+  }
+
+  return through2.obj(transform)
+}
+
+let filesProcessed = {}
+
+function markFileAsProcessed () {
+  function transform (file, enc, done) {
+    filesProcessed[file.path] = true
+    this.push(file)
+    done()
+  }
+
+  return through2.obj(transform)
+}
+
+function rejectFilesNotProcessed () {
+  function transform (file, enc, done) {
+    if (file.path in filesProcessed) {
+      this.push(file)
+    }
+    done()
+  }
+
+  return through2.obj(transform)
+}
+
 // This is called with a `taskName` and `methodName`
 // and creates a gulp task that is a merged stream of all plugins
 // with `methodName` created with `createStreamForInstance`
@@ -32,14 +71,57 @@ export default function (taskOptions) {
     methodName,
   } = taskOptions
 
+  let {
+    beforeEach,
+    afterEach,
+    //methodName,
+    shouldProcessAssets,
+    src,
+    pluginInstance,
+  } = taskOptions
+
   let taskNameProxy = `${taskName}--${methodName}`
+  let config = getAppConfig()
+  let beforeFromConfig = config.beforeEach
+  let afterFromConfig = config.afterEach
+
+  let beforeNameTargeted = 'before' +
+      methodName.charAt(0).toUpperCase() + methodName.slice(1)
+  let afterNameTargeted = 'after' +
+      methodName.charAt(0).toUpperCase() + methodName.slice(1)
 
   gulp().task(taskNameProxy, false, () => {
-    let __streams = []
+    let stream = gulp()
+        .src(src)
+        .pipe(plumberErrors())
+        .pipe(skipLeadingUnderscores())
+
+    if (taskOptions[beforeNameTargeted]) {
+      stream = taskOptions[beforeNameTargeted](stream, taskOptions)
+    }
+
+    if (beforeEach) {
+      stream = beforeEach(stream, taskOptions)
+    }
+
+    if (beforeFromConfig) {
+      stream = beforeFromConfig(stream, taskOptions)
+    }
 
     getAllInstances().forEach((pluginInstance) => {
       if (!pluginInstance[methodName]) {
         return
+      }
+
+      let pluginShouldProcessAssets = pluginInstance.shouldProcessAssets()
+      if (shouldProcessAssets) {
+        if (!pluginShouldProcessAssets) {
+          return
+        }
+      } else {
+        if (pluginShouldProcessAssets) {
+          return
+        }
       }
 
       let callbackContext = xtend({}, taskOptions, {
@@ -49,144 +131,46 @@ export default function (taskOptions) {
       })
 
       if (taskOptions.modifyContext) {
-        taskOptions.modifyContext(taskOptions)
+        taskOptions.modifyContext(callbackContext)
       }
 
-      let stream = createStreamForInstance(callbackContext)
-
-      if (!stream) {
+      let methodResult = pluginInstance[methodName](callbackContext)
+      if (!methodResult) {
         return
       }
 
-      __streams.push(stream)
+      //if (!Array.isArray(methodResult)) {
+        //methodResult = [methodResult]
+      //}
+
+      methodResult = []
+          // This is useful in development.
+          //.concat(announceFileProcessing(pluginInstance, methodName))
+          .concat(markFileAsProcessed())
+          .concat(methodResult)
+
+      stream = stream
+          .pipe(gulpif(
+            pluginInstance.src,
+            combine(methodResult)
+          ))
+
     })
 
-    if (__streams.length === 0) {
-      return
+    if (taskOptions[afterNameTargeted]) {
+      stream = taskOptions[afterNameTargeted](stream, taskOptions)
     }
 
-    return merge(__streams)
+    if (afterEach) {
+      stream = afterEach(stream, taskOptions)
+    }
+
+    if (afterFromConfig) {
+      stream = afterFromConfig(stream, taskOptions)
+    }
+
+    stream = stream.pipe(rejectFilesNotProcessed())
+
+    return stream
   })
-}
-
-// Creates a stream to be merged into `createPluginMethodTask`
-// Respects `shouldProcessAssets`
-// Returns null if `pluginInstance[methodName]` returns null
-//
-// Also modifies the stream with a series of callbacks, that can
-// resemble something like:
-// let stream = gulp()
-//     .src(pluginInstance.src)
-//     .pipe(plumberErrors())
-//     .pipe(skipLeadingUnderscores())
-//
-// stream = taskOptions.beforeMinify(stream, taskOptions)
-// stream = taskOptions.beforeEach(stream, taskOptions)
-// stream = appConfig.beforeEach(stream, taskOptions)
-//
-// stream = stream
-//     .pipe(...pluginInstance.minify())
-//
-// stream = taskOptions.afterMinify(stream, taskOptions)
-// stream = taskOptions.afterEach(stream, taskOptions)
-// stream = appConfig.afterEach(stream, taskOptions)
-
-function createStreamForInstance (taskOptions) {
-  let {
-    beforeEach,
-    afterEach,
-    methodName,
-    shouldProcessAssets,
-    src,
-    pluginInstance,
-  } = taskOptions
-
-  let config = getAppConfig()
-  let beforeFromConfig = config.beforeEach
-  let afterFromConfig = config.afterEach
-
-  let pluginShouldProcessAssets = pluginInstance.shouldProcessAssets()
-  if (shouldProcessAssets) {
-    if (!pluginShouldProcessAssets) {
-      return
-    }
-  } else {
-    if (pluginShouldProcessAssets) {
-      return
-    }
-  }
-
-  let methodResult = pluginInstance[methodName](taskOptions)
-  if (!methodResult) {
-    return
-  }
-
-  let __pipeline = []
-      .concat(skipLeadingUnderscores())
-
-      // This is useful in development.
-      //.concat(through2.obj(function (file, enc, done) {
-      //  console.log(` \
-      //  Will process \
-      //  \`${file.relative}\` \
-      //  with \
-      //  \`${pluginInstance.displayName}#${methodName}\` \
-      //  `)
-      //  this.push(file)
-      //  done()
-      //}))
-
-      .concat(methodResult)
-
-  let beforeNameTargeted = 'before' +
-      methodName.charAt(0).toUpperCase() + methodName.slice(1)
-  let afterNameTargeted = 'after' +
-      methodName.charAt(0).toUpperCase() + methodName.slice(1)
-
-  let stream = gulp()
-      .src(src)
-      .pipe(plumberErrors())
-
-  //if (global.isWatching) {
-    //console.log(src)
-    //stream = stream.pipe(watch(src))
-  //}
-
-  if (taskOptions[beforeNameTargeted]) {
-    stream = taskOptions[beforeNameTargeted](stream, taskOptions)
-  }
-
-  if (beforeEach) {
-    stream = beforeEach(stream, taskOptions)
-  }
-
-  if (beforeFromConfig) {
-    stream = beforeFromConfig(stream, taskOptions)
-  }
-
-  stream = stream
-      .pipe(gulpif(
-        pluginInstance.src,
-        combine(__pipeline),
-        // TODO gutil.noop?
-        through2.obj((file, enc, cb) => {
-          cb()
-        })
-      ))
-
-  if (taskOptions[afterNameTargeted]) {
-    stream = taskOptions[afterNameTargeted](stream, taskOptions)
-  }
-
-  if (afterEach) {
-    stream = afterEach(stream, taskOptions)
-  }
-
-  if (afterFromConfig) {
-    stream = afterFromConfig(stream, taskOptions)
-  }
-
-  //console.log(taskOptions)
-
-  return stream
 }

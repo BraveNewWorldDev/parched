@@ -49,7 +49,7 @@ export default function (taskOptions) {
       }
 
       let combined = combine(__result)
-      stream
+      stream = stream
           //.pipe(plumberErrors())
           .pipe(gulpif(pluginInstance.src, combined))
     })

@@ -1,6 +1,6 @@
 import plumberErrors from '../pipes/plumberErrors'
 import skipLeadingUnderscores from '../pipes/skipLeadingUnderscore'
-import addPluginMethodToStream from '../util/addPluginMethodToStream'
+import announceFileProcessing from '../util/announceFileProcessing'
 
 import {
   gulp,
@@ -20,26 +20,12 @@ import {
   getAppConfig,
 } from '../ConfigStore'
 
-function announceFileProcessing (pluginInstance, methodName) {
-  function transform (file, enc, done) {
-    console.log(` \
-    Will process \
-    \`${file.relative}\` \
-    with \
-    \`${pluginInstance.displayName}#${methodName}\` \
-    `)
-    this.push(file)
-    done()
-  }
-
-  return through2.obj(transform)
-}
-
-let filesProcessed = {}
+let filesPreProcessed = {}
+let filesPostProcessed = {}
 
 function markFileAsProcessed () {
   function transform (file, enc, done) {
-    filesProcessed[file.path] = true
+    filesPreProcessed[file.path] = true
     this.push(file)
     done()
   }
@@ -49,7 +35,8 @@ function markFileAsProcessed () {
 
 function rejectFilesNotProcessed () {
   function transform (file, enc, done) {
-    if (file.path in filesProcessed) {
+    if (file.path in filesPreProcessed) {
+      filesPostProcessed[file.path] = true
       this.push(file)
     }
     done()
@@ -139,13 +126,9 @@ export default function (taskOptions) {
         return
       }
 
-      //if (!Array.isArray(methodResult)) {
-        //methodResult = [methodResult]
-      //}
-
       methodResult = []
           // This is useful in development.
-          //.concat(announceFileProcessing(pluginInstance, methodName))
+          .concat(announceFileProcessing(pluginInstance, methodName))
           .concat(markFileAsProcessed())
           .concat(methodResult)
 

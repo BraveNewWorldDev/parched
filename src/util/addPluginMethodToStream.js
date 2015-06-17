@@ -1,4 +1,5 @@
 import plumberErrors from '../pipes/plumberErrors'
+import announceFileProcessing from '../util/announceFileProcessing'
 
 import {
   combine,
@@ -48,7 +49,7 @@ export default function (taskOptions) {
         return
       }
 
-      let combined = combine(__result)
+      let combined = combine([].concat(__result).concat(announceFileProcessing(pluginInstance, methodName)))
       stream = stream
           //.pipe(plumberErrors())
           .pipe(gulpif(pluginInstance.src, combined))

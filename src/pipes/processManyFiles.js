@@ -27,7 +27,15 @@ function addFileToCache (cache, file) {
   cache.files[file.path] = cache.files[file.path] || file
 }
 
-export default function (src, context, done) {
+export default function (src, context, doneFlushOrTransform, doneFlush_) {
+  var done = doneFlushOrTransform
+  var doneTransformArg
+
+  if (arguments.length === 4) {
+    done = doneFlush_
+    doneTransformArg = doneFlushOrTransform
+  }
+
   let cache = getCacheFromContext(context)
   let previousCache = getFilesByMTime(cache)
 
@@ -41,7 +49,11 @@ export default function (src, context, done) {
     }
 
     this.push(file)
-    doneTransform()
+    if (doneTransformArg) {
+      doneTransformArg(file, doneTransform)
+    } else {
+      doneTransform()
+    }
   }
 
   function flush (doneFlush) {

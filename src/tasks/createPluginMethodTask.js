@@ -25,7 +25,8 @@ let filesPostProcessed = {}
 
 function markFileAsProcessed () {
   function transform (file, enc, done) {
-    filesPreProcessed[file.path] = true
+    file.originalPath = file.path
+    filesPreProcessed[file.originalPath] = true
     this.push(file)
     done()
   }
@@ -35,8 +36,8 @@ function markFileAsProcessed () {
 
 function rejectFilesNotProcessed () {
   function transform (file, enc, done) {
-    if (file.path in filesPreProcessed) {
-      filesPostProcessed[file.path] = true
+    if (file.originalPath in filesPreProcessed) {
+      filesPostProcessed[file.originalPath] = file.path
       this.push(file)
     }
     done()

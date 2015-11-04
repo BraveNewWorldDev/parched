@@ -7,9 +7,7 @@ import {
   through2,
   gulpif,
   combine,
-  merge,
   xtend,
-  watch,
 } from '../vendor'
 
 import {

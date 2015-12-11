@@ -46,11 +46,7 @@ function rejectFilesNotProcessed () {
 
 // This is called with a `taskName` and `methodName`
 // and creates a gulp task that is a merged stream of all plugins
-// with `methodName` created with `createStreamForInstance`
-//
-// TODO However it might make more sense to use a combine stream,
-// like addPluginMethodToStream. There was a reason for going with
-// a merged stream ... somewhere
+// with `methodName`.
 export default function (taskOptions) {
   let {
     taskName,

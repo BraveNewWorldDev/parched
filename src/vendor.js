@@ -4,10 +4,8 @@ export default {
   gulp: getGulpReference,
   gulpif: require('gulp-if'),
   gutil: require('gulp-util'),
-  lazypipe: require('lazypipe'),
   through2: require('through2'),
   combine: require('stream-combiner'),
-  multistream: require('multistream'),
   merge: require('merge-stream'),
   watch: require('gulp-watch'),
 

@@ -1,14 +1,15 @@
-import through from 'through'
+import through2 from 'through2'
 import sortBeforeAfter from '../util/sortBeforeAfter'
 
 export default function (options) {
   let allFiles = []
 
-  function transform (file) {
+  function transform (file, enc, done) {
     allFiles.push(file)
+    done()
   }
 
-  function flush () {
+  function flush (done) {
     let sorted = sortBeforeAfter({
       collection: allFiles,
       before: options.before,
@@ -20,11 +21,11 @@ export default function (options) {
     })
 
     sorted.forEach((item) => {
-      this.queue(item)
+      this.push(item)
     })
 
-    this.queue(null)
+    done()
   }
 
-  return through(transform, flush)
+  return through2.obj(transform, flush)
 }

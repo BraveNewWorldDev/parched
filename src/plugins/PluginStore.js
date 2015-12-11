@@ -1,4 +1,3 @@
-import gulpmatch from 'gulp-match'
 import sortBeforeAfter from '../util/sortBeforeAfter'
 
 import {

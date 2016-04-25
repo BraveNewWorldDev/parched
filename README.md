@@ -10,13 +10,15 @@ It is heavily inspired by Brunch.
 
 See [parched-example-app](https://github.com/raisedmedia/parched-example-app), or [parched-tasks-webapp](https://github.com/raisedmedia/parched-tasks-webapp) even. The following will be based on them.
 
+A list of ready made plugins can be found here [parched-plugins](https://www.npmjs.com/browse/keyword/parched)
+
 ## Getting Started
 
 ```bash
 npm install --save gulp parched
 ```
 
-Then update your `Gulpfile.js`
+Then update your `Gulpfile.js`.
 
 ```javascript
 var gulp = require('gulp');

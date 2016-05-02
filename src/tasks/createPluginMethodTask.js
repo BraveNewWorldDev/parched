@@ -8,6 +8,7 @@ import {
   gulpif,
   combine,
   xtend,
+  gutil,
 } from '../vendor'
 
 import {
@@ -58,6 +59,7 @@ export default function (taskOptions) {
     afterEach,
     //methodName,
     shouldProcessAssets,
+    shouldProcessUnderscores,
     src,
     pluginInstance,
   } = taskOptions
@@ -76,7 +78,7 @@ export default function (taskOptions) {
     let stream = gulp()
         .src(src)
         .pipe(plumberErrors())
-        .pipe(skipLeadingUnderscores())
+        .pipe(shouldProcessUnderscores ? gutil.noop() : skipLeadingUnderscores())
 
     if (taskOptions[beforeNameTargeted]) {
       stream = taskOptions[beforeNameTargeted](stream, taskOptions)

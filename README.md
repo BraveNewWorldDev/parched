@@ -195,6 +195,7 @@ Property | Description
 `string[] methodNames` | Flat list of plugin method names
 `stream stream` | The stream to be modified
 `bool? shouldProcessAssets` | To asset or not
+`bool? shouldProcessUnderscores` | Process files / folders that start with an underscore
 
 ### Parched.createPluginMethodTask(options)
 

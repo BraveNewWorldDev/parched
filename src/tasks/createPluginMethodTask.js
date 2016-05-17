@@ -62,6 +62,7 @@ export default function (taskOptions) {
     shouldProcessUnderscores,
     src,
     pluginInstance,
+    base,
   } = taskOptions
 
   let taskNameProxy = `${taskName}--${methodName}`
@@ -75,8 +76,18 @@ export default function (taskOptions) {
       methodName.charAt(0).toUpperCase() + methodName.slice(1)
 
   gulp().task(taskNameProxy, false, () => {
+    let srcOpts = {}
+    if (base) {
+      srcOpts.base = base
+    }
+
+    let finalSrc = src
+    if (typeof src === 'function') {
+      finalSrc = src()
+    }
+
     let stream = gulp()
-        .src(src)
+        .src(finalSrc, srcOpts)
         .pipe(plumberErrors())
         .pipe(shouldProcessUnderscores ? gutil.noop() : skipLeadingUnderscores())
 

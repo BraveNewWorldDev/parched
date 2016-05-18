@@ -25,10 +25,6 @@ export class Plugin {
   }
 }
 
-// TODO is there a better way of setting simple properties on an ES6 class
-Plugin.prototype.isProduction = isProduction
-Plugin.prototype.processManyFiles = processManyFiles
-
 export function createPlugin (proto) {
   class __tmpPlugin extends Plugin {
   }
